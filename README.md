@@ -1,2 +1,3 @@
-# proyecto_final
-Curso Desarrollo de sistemas 4
+#   Desarrollo de Sistemas IV: Proyecto Final
+Alumnos:
+- González Valle Javier Uziel
