@@ -2,3 +2,4 @@
 Alumnos:
 - González Valle Javier Uziel
 - Santiago Hernandez Bertha Alicia
+- Guizar Manriquez Otman
