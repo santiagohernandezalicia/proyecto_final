@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+
 ''' Lector de archivo CSV y creador de diccionario de revistas '''
 
 def leer_csv(folder_path, tipo):
