@@ -89,20 +89,82 @@ def get_publisher(journal_url: str) -> str:
         print(f"Error obteniendo publisher de {journal_url}: {str(e)}")
         return 'N/A'
 
+def get_issn(journal_url: str) -> str:
+    """Extrae el ISSN de la página de la revista"""
+    try:
+        journal_site = scrap(journal_url)
+        if not journal_site:
+            return 'N/A'
+        soup = BeautifulSoup(journal_site.text, 'html.parser')
+        
+        # Buscar en la estructura journalgrid
+        journal_grid = soup.find('div', class_='journalgrid')
+        if journal_grid:
+            for div in journal_grid.find_all('div'):
+                h2 = div.find('h2', string='ISSN')
+                if h2:
+                    p_tag = h2.find_next_sibling('p')
+                    if p_tag:
+                        return p_tag.text.strip()
+        
+        # Método alternativo si no se encuentra en journalgrid
+        issn_label = soup.find('span', string='ISSN')
+        if issn_label:
+            issn_value = issn_label.find_next('span')
+            if issn_value:
+                return issn_value.text.strip()
+        
+        return 'N/A'
+    except Exception as e:
+        print(f"Error obteniendo ISSN de {journal_url}: {str(e)}")
+        return 'N/A'
+
+def get_publication_type(journal_url: str) -> str:
+    """Extrae el tipo de publicación de la revista"""
+    try:
+        journal_site = scrap(journal_url)
+        if not journal_site:
+            return 'N/A'
+        soup = BeautifulSoup(journal_site.text, 'html.parser')
+        
+        # Buscar en la estructura journalgrid
+        journal_grid = soup.find('div', class_='journalgrid')
+        if journal_grid:
+            for div in journal_grid.find_all('div'):
+                h2 = div.find('h2', string='Publication type')
+                if h2:
+                    p_tag = h2.find_next_sibling('p')
+                    if p_tag:
+                        return p_tag.text.strip()
+        
+        # Método alternativo si no se encuentra en journalgrid
+        type_label = soup.find('span', string='Type')
+        if type_label:
+            type_value = type_label.find_next('span')
+            if type_value:
+                return type_value.text.strip()
+        
+        return 'N/A'
+    except Exception as e:
+        print(f"Error obteniendo Publication Type de {journal_url}: {str(e)}")
+        return 'N/A'
 
 def get_journal_data(journal_url: str):
+    """Función actualizada que incluye todos los campos"""
     try:
         return {
             'url': journal_url,
             'h_index': get_h_index(journal_url),
-            'get_homepage': get_homepage(journal_url),
-            'get_publisher': get_publisher(journal_url),
+            'homepage': get_homepage(journal_url),
+            'publisher': get_publisher(journal_url),
+            'issn': get_issn(journal_url),
+            'publication_type': get_publication_type(journal_url),
             'last_update': datetime.now().isoformat()
         }
     except Exception as e:
         print(f"Error extrayendo datos de {journal_url}: {str(e)}")
         return None
-
+    
 def main():
     journal_name = 'World Psychiatry'
 
