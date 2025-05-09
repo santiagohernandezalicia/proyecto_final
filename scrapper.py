@@ -149,6 +149,41 @@ def get_publication_type(journal_url: str) -> str:
         print(f"Error obteniendo Publication Type de {journal_url}: {str(e)}")
         return 'N/A'
 
+def get_categories(journal_url: str)->dict:
+    """ Encuentra el(las) área(s) y su(s) respectiva(s) categoría(s) de la revista"""
+    try:
+        categories = {}
+        journal_site = scrap(journal_url)
+        if not journal_site:
+            return 'N/A'
+        soup = BeautifulSoup(journal_site.text, 'html.parser')
+        lis = soup.find_all('li', attrs={"style":'display: inline-block;'})
+        for li in lis:
+            uls = li.find_all('ul', class_="treecategory")
+            for ul in uls:
+                cat_a = ul.find_all('a')
+                for a in cat_a:
+                    categories[a.text] = f"https://{a['href']}"
+        return categories
+    except Exception as e:
+        print(f"Error obteniendo Categories de {journal_url}: {str(e)}")
+
+def get_widget(journal_url: str)->str | None:
+    """ Recupera el código HTML del widget de la revista """
+    try:
+        journal_site = scrap(journal_url)
+        if not journal_site:
+            return 'N/A'
+        soup = BeautifulSoup(journal_site.text, 'html.parser')
+        find_widget = soup.find('input', {"id":'embed_code'})
+        if find_widget:
+            return find_widget.get('value')
+        else:
+            return None
+    except Exception as e:
+        print(f"Error obteniendo Widget de {journal_url}: {str(e)}")
+        return None
+
 def get_journal_data(journal_url: str):
     """Función actualizada que incluye todos los campos"""
     try:
