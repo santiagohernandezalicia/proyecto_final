@@ -194,6 +194,8 @@ def get_journal_data(journal_url: str):
             'publisher': get_publisher(journal_url),
             'issn': get_issn(journal_url),
             'publication_type': get_publication_type(journal_url),
+            'categories': get_categories(journal_url),
+            'widget': get_widget(journal_url),
             'last_update': datetime.now().isoformat()
         }
     except Exception as e:
