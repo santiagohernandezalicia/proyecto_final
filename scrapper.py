@@ -184,10 +184,11 @@ def get_widget(journal_url: str)->str | None:
         print(f"Error obteniendo Widget de {journal_url}: {str(e)}")
         return None
 
-def get_journal_data(journal_url: str):
+def get_journal_data(journal_url: str, journal_title:str)->dict | None:
     """Función actualizada que incluye todos los campos"""
     try:
         return {
+            'title': journal_title,
             'url': journal_url,
             'h_index': get_h_index(journal_url),
             'homepage': get_homepage(journal_url),
@@ -203,19 +204,19 @@ def get_journal_data(journal_url: str):
         return None
     
 def main():
-    journal_name = 'World Psychiatry'
-
-    journal_url = find_journal_url(journal_name)
-    if journal_url:
-        time.sleep(DELAY)
-        journal_data = get_journal_data(journal_url)
-        if journal_data:
-            print("Datos obtenidos con éxito:")
-            print(json.dumps(journal_data, indent=2))
-        else:
-            print("No se pudieron obtener los datos")
-    else:
-        print(f"No se encontró la revista {journal_name}")
+    journals_list = []
+    with open(os.path.join("datos", "json", "prueba.json"), "r") as json_file:
+        data = json_file.read()
+        parsed_data = json.loads(data)
+        journals = list(parsed_data.keys())
+        for i in range(0, 1):
+            journal_url = find_journal_url(journals[i])
+            if journal_url:
+                time.sleep(DELAY)
+                journal_data = get_journal_data(journal_url, journals[i])
+                journals_list.append(journal_data)
+    with open(os.path.join("datos", "json", "prueba_segundo.json"), "w", encoding='latin-1') as archivo_json:
+        json.dump(journals_list, archivo_json, indent=4)
 
 if __name__ == '__main__':
     main()
