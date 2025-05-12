@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Barra de búsqueda -->
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form action="{{ url_for('area') }}" method="GET" class="card shadow-sm">
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="hidden" name="a" value="{{ area }}">
+                        <input type="text" class="form-control form-control-lg" 
+                               placeholder="Buscar revistas en esta área..." 
+                               name="q" value="{{ query }}"
+                               aria-label="Buscar revistas">
+                        <button class="btn btn-unison" type="submit">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    {% if query %}
+    <div class="card shadow">
+        <div class="card-header bg-unison text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-search"></i> Resultados para: "{{ query }}" en {{ area }}
+                <span class="badge bg-light text-dark float-end">
+                    {{ journals|length }} revistas encontradas
+                </span>
+            </h4>
+        </div>
+
+        {% if journals %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Áreas</th>
+                        <th>Editorial</th>
+                        <th>H-Index</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for journal in journals %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('journal_detail', journal_title=journal.title) }}" 
+                            class="text-decoration-none fw-bold text-unison">
+                                {{ journal.title }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if journal.categories is mapping %}
+                                {% for area in journal.categories.keys() %}
+                                    <span class="badge bg-secondary mb-1">{{ area }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ journal.publisher|truncate(20) }}</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">
+                                {{ journal.h_index if journal.h_index else 'N/A' }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="card-body">
+            <div class="alert alert-warning mb-0">
+                <i class="bi bi-exclamation-triangle"></i> No se encontraron revistas que coincidan con "{{ query }}"
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="card shadow">
+        <div class="card-header bg-unison text-white">
+            <h4 class="mb-0">
+                <i class="bi bi-search"></i> Revistas en {{ area }}
+                <span class="badge bg-light text-dark float-end">
+                    {{ results|length }} revistas encontradas
+                </span>
+            </h4>
+        </div>
+
+        <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Áreas</th>
+                    <th>Editorial</th>
+                    <th>H-Index</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for journal in journals %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('journal_detail', journal_title=journal.title) }}" 
+                        class="text-decoration-none fw-bold text-unison">
+                        {{ journal.title }}
+                    </a>
+                </td>
+                <td>
+                    {% if journal.categories is mapping %}
+                        {% for area in journal.categories.keys() %}
+                            <span class="badge bg-secondary mb-1">{{ area }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-muted">Sin Categorías</span>
+                    {% endif %}
+                </td>
+                <td>{{ journal.publisher|truncate(20) }}</td>
+                <td>
+                    <span class="badge bg-warning text-dark">
+                        {{ journal.h_index if journal.h_index else 'N/A' }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
