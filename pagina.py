@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Cargar datos de revistas
-with open('segundo_otman.json', 'r', encoding='utf-8') as f:
+with open(os.path.join("datos", "json", "journals.json"), 'r', encoding='utf-8') as f:
     JOURNALS_DATA = json.load(f)
 
 def normalize_text(text):
