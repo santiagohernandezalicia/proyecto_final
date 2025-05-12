@@ -53,6 +53,22 @@ def journal_detail(journal_title):
     
     return render_template('journal_detail.html', journal=journal)
 
+# RUTA PARA EXPLORA (con abecedario)
+@app.route('/explora')
+def explora():
+    return render_template('explora.html', letra_actual=None)
+
+# RUTA PARA EXPLORAR REVISTAS POR LETRA
+@app.route('/explorar/<letra>')
+def explorar_por_letra(letra):
+    letra = letra.upper()
+    revistas_filtradas = [
+        journal for journal in JOURNALS_DATA
+        if journal.get('title', '').upper().startswith(letra)
+    ]
+    return render_template('explora.html', letra_actual=letra, resultados=revistas_filtradas)
+
+
 @app.route('/credits')
 def credits():
     return render_template('credits.html')
