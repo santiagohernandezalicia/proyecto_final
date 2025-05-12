@@ -53,7 +53,9 @@ def journal_detail(journal_title):
     
     return render_template('journal_detail.html', journal=journal)
 
-
+@app.route('/credits')
+def credits():
+    return render_template('credits.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
