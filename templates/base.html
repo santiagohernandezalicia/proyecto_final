@@ -31,7 +31,8 @@
                         <a class="nav-link" href="#"><i class="bi bi-bookmarks"></i> Catálogos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-compass"></i> Explorar</a>
+                        <!-- CORREGIDO: Enlace funcional a /explora -->
+                        <a class="nav-link" href="{{ url_for('explora') }}"><i class="bi bi-compass"></i> Explorar</a>
                     </li>
                 </ul>
                 <form class="d-flex" action="{{ url_for('search') }}" method="GET">
@@ -42,7 +43,7 @@
                 </form>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('credits') }}"><i class="bi bi-people"></i> Créditos</a>
+                        <a class="nav-link" href="#"><i class="bi bi-people"></i> Créditos</a>
                     </li>
                 </ul>
             </div>
@@ -54,7 +55,6 @@
         {% block content %}{% endblock %}
     </main>
 
-  
     <footer class="bg-unison text-white py-3 mt-5">
         <div class="container text-center">
             <p class="mb-0">© 2025 Universidad de Sonora. Todos los derechos reservados.</p>
