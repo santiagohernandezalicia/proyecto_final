@@ -53,5 +53,7 @@ def journal_detail(journal_title):
     
     return render_template('journal_detail.html', journal=journal)
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
