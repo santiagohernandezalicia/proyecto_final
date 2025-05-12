@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <!-- Título de la revista -->
+            <h2 class="text-center">{{ journal.title }}</h2>
+            <div class="text-center mb-4">
+                <a href="{{ journal.url }}" target="_blank" class="btn btn-primary">Ver en SCImago</a>
+                <a href="{{ journal.homepage }}" target="_blank" class="btn btn-secondary">Visitar Homepage</a>
+            </div>
+
+            <!-- Información de la revista -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4>Información General</h4>
+                    <p><strong>Editorial:</strong> {{ journal.publisher }}</p>
+                    <p><strong>ISSN:</strong> {{ journal.issn }}</p>
+                    <p><strong>Tipo de Publicación:</strong> {{ journal.publication_type }}</p>
+                    <p><strong>H-Index:</strong> {{ journal.h_index if journal.h_index else 'N/A' }}</p>
+
+                    <h5 class="mt-4">Categorías</h5>
+                    {% if journal.categories %}
+                        <ul>
+                            {% for category, url in journal.categories.items() %}
+                                <li><a href="{{ url }}" target="_blank">{{ category }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No se especificaron categorías.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
