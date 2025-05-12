@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Explorar Revistas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-unison">Explorar Revistas</h1>
+
+    <!-- Abecedario -->
+    <div class="mb-5">
+        <h5 class="text-unison">Selecciona una letra:</h5>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            {% for letra in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+            <a href="{{ url_for('explorar_por_letra', letra=letra) }}"
+               class="btn btn-outline-primary {% if letra_actual == letra %}active fw-bold{% endif %}">
+                {{ letra }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if letra_actual %}
+    <!-- Resultados de búsqueda -->
+    <div>
+        <h3 class="mb-4">Revistas que comienzan con: 
+            <span class="badge bg-hindex fs-5">{{ letra_actual }}</span>
+        </h3>
+
+        {% if resultados %}
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Editorial</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for revista in resultados %}
+                            <tr>
+                                <td>{{ revista.title }}</td>
+                                <td>{{ revista.publisher }}</td>
+                                <td>
+                                    <a href="{{ url_for('journal_detail', journal_title=revista.title) }}" class="text-unison">
+                                        Ver más
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-muted">No se encontraron revistas que comiencen con "{{ letra_actual }}".</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
